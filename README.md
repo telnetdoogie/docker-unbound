@@ -5,7 +5,7 @@ Minimal unbound installation based on Alpine Linux at 6mb.
 * Support for DNSSEC
 * Absolute minimal config
 
-## run
+## Run with Docker
 
 Example for a normal running config.
 
@@ -16,6 +16,20 @@ docker run --name unbound -d \
   -v unbound-root-key:/var/lib/unbound/keys \
   cdrocker/unbound
 ```
+
+## Run with Docker Compose
+
+The included Compose file creates and attaches the same named
+`unbound-root-key` volume used by the `docker run` example automatically, so
+switching between the two commands preserves the trust-anchor state:
+
+```
+docker compose up -d
+```
+
+Use `docker compose down` to stop and remove the container while retaining the
+DNSSEC trust-anchor state. Do not use `docker compose down -v` unless you
+intentionally want to discard that state.
 
 The container initializes or refreshes its DNSSEC root trust anchor with
 `unbound-anchor` at startup, then uses Unbound's `auto-trust-anchor-file` for
